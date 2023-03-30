@@ -28,6 +28,18 @@ static vec3_t vec3_normalized(vec3_t v) {
     return (vec3_t) {v.x / l, v.y / l, v.z / l};
 }
 
+static vec3_t vec3_scale(vec3_t v, float scale) {
+    return (vec3_t) {v.x * scale, v.y * scale, v.z * scale};
+}
+
+static vec3_t vec3_add(vec3_t a, vec3_t b) {
+    return (vec3_t) {a.x + b.x, a.y + b.y, a.z + b.z};
+}
+
+static vec3_t vec3_sub(vec3_t a, vec3_t b) {
+    return (vec3_t) {a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
 static float clampf(float value, float min, float max) {
     if (value < min) return min;
     if (value > max) return max;
@@ -45,6 +57,16 @@ static bool ray_sphere_intersection(ray_t r, sphere_t s, float *t) {
     } else {
         *t = (-b - sqrtf(discriminant)) / (2.0f * a);
         return true;
+    }
+}
+
+static bool ray_sphere_intersection_with_normal(ray_t r, sphere_t s, float *t, vec3_t *normal) {
+    if (ray_sphere_intersection(r, s, t)) {
+        vec3_t pos = vec3_add(r.origin, vec3_scale(r.direction, *t));
+        *normal = vec3_scale(vec3_sub(pos, s.center), 1.0f / s.radius);
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -68,9 +90,13 @@ int main() {
                 sphere_t sphere = {{0, 0, -2}, 1.0f};
 
                 float depth;
-                if (ray_sphere_intersection(ray, sphere, &depth)) {
-                    uint8_t depth_clamped = (uint8_t) clampf(depth * 255, 0, 255);
-                    nano_gui_draw_pixel(i, j, depth_clamped, depth_clamped, depth_clamped);
+                vec3_t normal;
+                if (ray_sphere_intersection_with_normal(ray, sphere, &depth, &normal)) {
+//                    uint8_t depth_clamped = (uint8_t) clampf(depth * 255, 0, 255);
+                    uint8_t r = (uint8_t) clampf(normal.x * 255, 0, 255);
+                    uint8_t g = (uint8_t) clampf(normal.y * 255, 0, 255);
+                    uint8_t b = (uint8_t) clampf(normal.z * 255, 0, 255);
+                    nano_gui_draw_pixel(i, j, r, g, b);
                 } else {
                     nano_gui_draw_pixel(i, j, 0, 0, 0);
                 }

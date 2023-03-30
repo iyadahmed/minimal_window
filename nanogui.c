@@ -1,8 +1,10 @@
+#include <stdint.h>
+
 #define WIN32_LEAN_AND_MEAN
 #define UNICODE
 
-#include <stdint.h>
 #include <windows.h>
+
 #include "nanogui.h"
 
 #define FIXED_SIZE_WINDOW_STYLE (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU)

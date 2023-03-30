@@ -2,6 +2,7 @@
 #define UNICODE
 #endif
 
+#include <stdint.h>
 #include <windows.h>
 #include "nanogui.h"
 
@@ -13,6 +14,18 @@ BITMAPINFO bitmap_info;
 int global_width, global_height;
 
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+static uint32_t rgb_to_u32(uint8_t r, uint8_t g, uint8_t b) {
+    // Credit: https://stackoverflow.com/a/39979191/8094047
+    uint8_t alpha = 255;
+    return (alpha << 24) + (r << 16) + (g << 8) + b;
+}
+
+void nano_gui_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
+    uint32_t *pixel = (uint32_t *) bitmap_memory;
+    pixel += y * global_width + x;
+    *pixel = rgb_to_u32(r, g, b);
+}
 
 void nano_gui_create_fixed_size_window(int width, int height) {
     global_width = width;

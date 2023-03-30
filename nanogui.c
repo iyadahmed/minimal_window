@@ -12,9 +12,9 @@
 #define FIXED_SIZE_WINDOW_STYLE (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU)
 
 
-void *bitmap_memory;
-BITMAPINFO bitmap_info;
-int global_width, global_height;
+static void *bitmap_memory;
+static BITMAPINFO bitmap_info;
+static int global_width, global_height;
 
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

@@ -1,6 +1,4 @@
-#ifndef UNICODE
 #define UNICODE
-#endif
 
 #include <stdint.h>
 #include <windows.h>

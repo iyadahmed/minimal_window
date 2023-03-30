@@ -34,7 +34,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     global_width = width;
     global_height = height;
 
-    // Register the window class.
+    // Register the window class
     const wchar_t CLASS_NAME[] = L"NanoGUI Window Class";
 
     WNDCLASS wc = {};
@@ -47,21 +47,20 @@ void nano_gui_create_fixed_size_window(int width, int height) {
 
     RegisterClass(&wc);
 
-    // Create the window.
-
+    // Create the window
     HWND hwnd = CreateWindowEx(
-            0,                              // Optional window styles.
-            CLASS_NAME,                     // Window class
-            L"NanoGUI Window",    // Window text
-            FIXED_SIZE_WINDOW_STYLE,            // Window style
+            0,                                          // Optional window styles.
+            CLASS_NAME,                                 // Window class
+            L"NanoGUI Window",                          // Window text
+            FIXED_SIZE_WINDOW_STYLE,                    // Window style
 
             // Size and position
             CW_USEDEFAULT, CW_USEDEFAULT, width, height,
 
-            NULL,       // Parent window
-            NULL,       // Menu
-            hInstance,  // Instance handle
-            NULL        // Additional application data
+            NULL,                                       // Parent window
+            NULL,                                       // Menu
+            hInstance,                                  // Instance handle
+            NULL                                        // Additional application data
     );
 
     if (hwnd == NULL) {
@@ -89,7 +88,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
 }
 
 void nano_gui_run_main_loop() {
-    // Run the message loop.
+    // Run the message loop
     MSG msg = {};
     while (GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg);
@@ -106,7 +105,7 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         case WM_PAINT: {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
-            // All painting occurs here, between BeginPaint and EndPaint.
+            // All painting occurs here, between BeginPaint and EndPaint
             StretchDIBits(hdc,
                           0, 0,
                           global_width, global_height,

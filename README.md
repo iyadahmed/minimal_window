@@ -5,6 +5,10 @@ A very small GUI library for putting pixels on the screen, perfect for raytracin
 - [x] Win32 (Windows)
 - [ ] X11 (Linux, and macOS via XQuartz)
 
+## Supported Compilers
+- [x] GCC on Windows (MSYS2 Mingw64)
+- [ ] MSVC
+
 
 ## API
 ```c

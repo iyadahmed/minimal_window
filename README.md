@@ -3,7 +3,7 @@ A very small GUI library for putting pixels on the screen, perfect for raytracin
 
 ## Supported Platforms
 - [x] Win32 (Windows)
-- [ ] X11 (Linux, and Mac via XQuartz)
+- [ ] X11 (Linux, and macOS via XQuartz)
 
 
 ## API

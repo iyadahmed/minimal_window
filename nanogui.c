@@ -1,7 +1,5 @@
 #include "nanogui.h"
 
-#include <iostream>
-
 
 #ifndef UNICODE
 #define UNICODE
@@ -18,12 +16,12 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     const wchar_t CLASS_NAME[] = L"NanoGUI Window Class";
 
     WNDCLASS wc = {};
-    HINSTANCE hInstance = GetModuleHandle(nullptr);
+    HINSTANCE hInstance = GetModuleHandle(NULL);
 
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
     wc.lpszClassName = CLASS_NAME;
-    wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
+    wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 
     RegisterClass(&wc);
 
@@ -38,13 +36,13 @@ void nano_gui_create_fixed_size_window(int width, int height) {
             // Size and position
             CW_USEDEFAULT, CW_USEDEFAULT, width, height,
 
-            nullptr,       // Parent window
-            nullptr,       // Menu
+            NULL,       // Parent window
+            NULL,       // Menu
             hInstance,  // Instance handle
-            nullptr        // Additional application data
+            NULL        // Additional application data
     );
 
-    if (hwnd == nullptr) {
+    if (hwnd == NULL) {
         return;
     }
 
@@ -54,7 +52,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
 void nano_gui_run_main_loop() {
     // Run the message loop.
     MSG msg = {};
-    while (GetMessage(&msg, nullptr, 0, 0) > 0) {
+    while (GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }

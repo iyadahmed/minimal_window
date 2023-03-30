@@ -1,6 +1,7 @@
 // Based on: https://samulinatri.com/things/win32-drawing-pixels/
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define WIN32_LEAN_AND_MEAN
 #define UNICODE
@@ -87,13 +88,14 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     ShowWindow(hwnd, SW_NORMAL);
 }
 
-void nano_gui_run_main_loop() {
-    // Run the message loop
+bool nano_gui_process_events() {
     MSG msg = {};
-    while (GetMessage(&msg, NULL, 0, 0) > 0) {
+    if (GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
+        return true;
     }
+    return false;
 }
 
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {

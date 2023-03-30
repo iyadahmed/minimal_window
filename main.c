@@ -3,6 +3,9 @@
 
 int main() {
     nano_gui_create_fixed_size_window(800, 600);
-    nano_gui_run_main_loop();
+
+    // Main loop
+    while (nano_gui_process_events()) {
+    }
     return 0;
 }

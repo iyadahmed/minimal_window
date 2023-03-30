@@ -1,5 +1,5 @@
 # NanoGUI
-A very small GUI library for putting pixels on the screen, perfect for raytracing projects;
+A very small GUI library for putting pixels on the screen, perfect for raytracing projects.
 
 ## Supported Platforms
 - [x] Win32 (Windows)

@@ -1,3 +1,5 @@
+// Based on: https://samulinatri.com/things/win32-drawing-pixels/
+
 #include <stdint.h>
 
 #define WIN32_LEAN_AND_MEAN

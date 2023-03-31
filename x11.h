@@ -48,7 +48,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     XSetWMProtocols(display, window, &del_window, 1);
 
     /* select kind of events we are interested in */
-    XSelectInput(display, window, ExposureMask | KeyPressMask);
+    XSelectInput(display, window, ExposureMask | KeyPressMask | StructureNotifyMask);
 
     /* display the window */
     XMapWindow(display, window);

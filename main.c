@@ -19,8 +19,23 @@ typedef struct {
     float radius;
 } sphere_t;
 
+typedef struct {
+    vec3_t color;
+    vec3_t specular;
+} lighting_t;
+
+typedef struct {
+    vec3_t position;
+    vec3_t color;
+    float power;
+} point_light_t;
+
+static float vec3_length_squared(vec3_t v) {
+    return v.x * v.x + v.y * v.y + v.z * v.z;
+}
+
 static float vec3_length(vec3_t v) {
-    return sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+    return sqrtf(vec3_length_squared(v));
 }
 
 static vec3_t vec3_normalized(vec3_t v) {
@@ -38,6 +53,10 @@ static vec3_t vec3_add(vec3_t a, vec3_t b) {
 
 static vec3_t vec3_sub(vec3_t a, vec3_t b) {
     return (vec3_t) {a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+static float vec3_dot(vec3_t a, vec3_t b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 static float clampf(float value, float min, float max) {
@@ -60,19 +79,54 @@ static bool ray_sphere_intersection(ray_t r, sphere_t s, float *t) {
     }
 }
 
-static bool ray_sphere_intersection_with_normal(ray_t r, sphere_t s, float *t, vec3_t *normal) {
+static bool
+ray_sphere_intersection_with_normal_and_position(ray_t r, sphere_t s, float *t, vec3_t *normal, vec3_t *position) {
     if (ray_sphere_intersection(r, s, t)) {
-        vec3_t pos = vec3_add(r.origin, vec3_scale(r.direction, *t));
-        *normal = vec3_scale(vec3_sub(pos, s.center), 1.0f / s.radius);
+        *position = vec3_add(r.origin, vec3_scale(r.direction, *t));
+        *normal = vec3_scale(vec3_sub(*position, s.center), 1.0f / s.radius);
         return true;
     } else {
         return false;
     }
 }
 
+static lighting_t
+blinn_phong_shading(point_light_t pl, vec3_t surface_position, vec3_t surface_normal, vec3_t view_direction,
+                    float specular_hardness) {
+    if (pl.power < 0) {
+        return (lighting_t) {{0, 0, 0},
+                             {0, 0, 0}};
+    }
+
+    lighting_t out;
+
+    vec3_t light_direction = vec3_sub(pl.position, surface_position);
+    float distance_squared = vec3_length_squared(light_direction);
+    float distance = sqrtf(distance_squared);
+    light_direction = vec3_scale(light_direction, 1.0f / distance);
+
+    // Diffuse
+    float NdotL = vec3_dot(surface_normal, light_direction);
+    float intensity = clampf(NdotL, 0.0f, 1.0f);
+    out.color = vec3_scale(pl.color, intensity * pl.power / distance_squared);
+
+    // Specular
+    vec3_t half_vector = vec3_normalized(vec3_add(light_direction, view_direction));
+    float NdotH = vec3_dot(surface_normal, half_vector);
+    float specular_intensity = powf(clampf(NdotH, 0.0f, 1.0f), specular_hardness);
+    out.specular = vec3_scale(pl.color, specular_intensity * pl.power / distance_squared);
+
+    return out;
+}
+
 int main() {
     int width = 640, height = 480;
     nano_gui_create_fixed_size_window(width, height);
+
+    point_light_t light1;
+    light1.power = 1.0f;
+    light1.color = (vec3_t) {1.0f, 1.0f, 1.0f};
+    light1.position = (vec3_t) {-1.0f, -1.0f, 0.0f};
 
     // Main loop
     while (nano_gui_process_events()) {
@@ -90,12 +144,13 @@ int main() {
                 sphere_t sphere = {{0, 0, -2}, 1.0f};
 
                 float depth;
-                vec3_t normal;
-                if (ray_sphere_intersection_with_normal(ray, sphere, &depth, &normal)) {
+                vec3_t position, normal;
+                if (ray_sphere_intersection_with_normal_and_position(ray, sphere, &depth, &normal, &position)) {
+                    lighting_t lighting = blinn_phong_shading(light1, position, normal, ray.direction, 20.0f);
 //                    uint8_t depth_clamped = (uint8_t) clampf(depth * 255, 0, 255);
-                    uint8_t r = (uint8_t) clampf(normal.x * 255, 0, 255);
-                    uint8_t g = (uint8_t) clampf(normal.y * 255, 0, 255);
-                    uint8_t b = (uint8_t) clampf(normal.z * 255, 0, 255);
+                    uint8_t r = (uint8_t) clampf(lighting.color.x * 255, 0, 255);
+                    uint8_t g = (uint8_t) clampf(lighting.color.y * 255, 0, 255);
+                    uint8_t b = (uint8_t) clampf(lighting.color.z * 255, 0, 255);
                     nano_gui_draw_pixel(i, j, r, g, b);
                 } else {
                     nano_gui_draw_pixel(i, j, 0, 0, 0);

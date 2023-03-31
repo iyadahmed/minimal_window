@@ -36,4 +36,4 @@ int main() {
 ```
 
 ## Example: raytracing
-See [main.c](https://github.com/iyadahmed/NanoGUI/blob/main/main.c)
+See [WonderBox](https://github.com/iyadahmed/WonderBox/blob/main/main.c)

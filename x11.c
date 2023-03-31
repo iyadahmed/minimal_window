@@ -1,8 +1,5 @@
 // Based on https://en.wikibooks.org/wiki/X_Window_Programming/Xlib and https://stackoverflow.com/a/54528360/8094047
 
-#ifndef NANOGUI_X11_H
-#define NANOGUI_X11_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -11,11 +8,11 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h> // thanks! https://stackoverflow.com/a/38555194/8094047
 
-Display *display;
-Window window;
-int screen;
-int global_width, global_height;
-XImage *image;
+static Display *display;
+static Window window;
+static int screen;
+static int global_width, global_height;
+static XImage *image;
 
 unsigned long rgb_to_ulong(uint8_t r, uint8_t g, uint8_t b) {
     return 65536 * b + 256 * g + r;
@@ -88,5 +85,3 @@ bool nano_gui_process_events() {
 
     return true;
 }
-
-#endif //NANOGUI_X11_H

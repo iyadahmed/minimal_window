@@ -43,8 +43,6 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     window = XCreateSimpleWindow(display, RootWindow(display, screen), 0, 0, width, height,
                                  1, BlackPixel(display, screen), WhitePixel(display, screen));
 
-    image = XGetImage(display, window, 0, 0, width, height, AllPlanes, ZPixmap);
-
     /* process window close event through event handler so XNextEvent does not fail */
     Atom del_window = XInternAtom(display, "WM_DELETE_WINDOW", 0);
     XSetWMProtocols(display, window, &del_window, 1);
@@ -54,6 +52,16 @@ void nano_gui_create_fixed_size_window(int width, int height) {
 
     /* display the window */
     XMapWindow(display, window);
+
+    // Wait for MapNotify
+    for (;;) {
+        XEvent e;
+        XNextEvent(display, &e);
+        if (e.type == MapNotify)
+            break;
+    }
+
+    image = XGetImage(display, window, 0, 0, width, height, AllPlanes, ZPixmap);
 }
 
 bool nano_gui_process_events() {

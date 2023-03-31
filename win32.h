@@ -73,11 +73,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
 
     // Allocate memory for the bitmap
     int bytes_per_pixel = 4;
-    bitmap_memory = VirtualAlloc(0,
-                                 width * height * bytes_per_pixel,
-                                 MEM_RESERVE | MEM_COMMIT,
-                                 PAGE_READWRITE
-    );
+    bitmap_memory = malloc(width * height * bytes_per_pixel);
 
     // bitmap_info struct for StretchDIBits
     bitmap_info.bmiHeader.biSize = sizeof(bitmap_info.bmiHeader);
@@ -98,6 +94,7 @@ bool nano_gui_process_events() {
         DispatchMessage(&msg);
         return true;
     }
+    free(bitmap_memory);
     return false;
 }
 

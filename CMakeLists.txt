@@ -19,8 +19,8 @@ elseif (UNIX AND NOT APPLE)
         # Finding Wayland based on https://github.com/emersion/hello-wayland/blob/f6a8203309977af03cda94765dd61367c189bea6/Makefile
         find_package(PkgConfig REQUIRED)
         pkg_search_module(WaylandClient REQUIRED wayland-client)
-        target_compile_options(NanoGUI PRIVATE ${WaylandCirent_CFLAGS})
-        target_link_libraries(NanoGUI PRIVATE ${WaylandCirent_LIBRARIES})
+        target_compile_options(NanoGUI PRIVATE ${WaylandClient_CFLAGS})
+        target_link_libraries(NanoGUI PRIVATE ${WaylandClient_LIBRARIES})
 
         pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
         pkg_get_variable(WAYLAND_SCANNER wayland-scanner wayland_scanner)

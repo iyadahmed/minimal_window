@@ -17,9 +17,9 @@ static void *bitmap_memory;
 static BITMAPINFO bitmap_info;
 static int global_width, global_height;
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-uint32_t rgb_to_u32(uint8_t r, uint8_t g, uint8_t b) {
+static uint32_t rgb_to_u32(uint8_t r, uint8_t g, uint8_t b) {
     // Credit: https://stackoverflow.com/a/39979191/8094047
     uint8_t alpha = 255;
     return (alpha << 24) + (r << 16) + (g << 8) + b;
@@ -95,7 +95,7 @@ bool nano_gui_process_events() {
     return false;
 }
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
         case WM_DESTROY:
             PostQuitMessage(0);

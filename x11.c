@@ -14,7 +14,7 @@ static int screen;
 static int global_width, global_height;
 static XImage *image;
 
-unsigned long rgb_to_ulong(uint8_t r, uint8_t g, uint8_t b) {
+static unsigned long rgb_to_ulong(uint8_t r, uint8_t g, uint8_t b) {
     return 65536 * b + 256 * g + r;
 }
 

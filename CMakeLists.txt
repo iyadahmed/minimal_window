@@ -15,7 +15,7 @@ elseif (UNIX AND NOT APPLE)
         target_link_libraries(NanoGUI PRIVATE ${X11_LIBRARIES})
         target_include_directories(NanoGUI PRIVATE ${X11_INCLUDE_DIR})
     else ()
-        target_sources(NanoGUI PRIVATE wayland.c)
+        target_sources(NanoGUI PRIVATE wayland.c shm.h)
         # Finding Wayland based on https://github.com/emersion/hello-wayland/blob/f6a8203309977af03cda94765dd61367c189bea6/Makefile
         find_package(PkgConfig REQUIRED)
         pkg_search_module(WaylandClient REQUIRED wayland-client)

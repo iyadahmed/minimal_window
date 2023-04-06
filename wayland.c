@@ -71,6 +71,11 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     registry = wl_display_get_registry(display);
     struct state_t state = {0};
     wl_registry_add_listener(registry, &registry_listener, &state);
+
+    // Do a round trip in order for `registry_handle_global` to be called and create the compositor
+    // otherwise `wl_compositor_create_surface` will fail
+    wl_display_roundtrip(display);
+
     surface = wl_compositor_create_surface(state.compositor);
 
     // Create shared memory pool

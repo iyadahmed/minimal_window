@@ -9,11 +9,11 @@
 #include "shm.h"
 
 
-uint32_t *pixels;
+static uint32_t *pixels;
 static struct wl_display *display;
 struct wl_registry *registry;
-int global_width, global_height;
-struct wl_surface *surface;
+static int global_width, global_height;
+static struct wl_surface *surface;
 
 struct state_t {
     struct wl_shm *shm;

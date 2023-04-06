@@ -9,14 +9,26 @@
 #include "shm.h"
 
 
+uint32_t *pixels;
 static struct wl_display *display;
 struct wl_registry *registry;
 int global_width, global_height;
+struct wl_surface *surface;
 
 struct state_t {
     struct wl_shm *shm;
     struct wl_compositor *compositor;
 };
+
+static uint32_t rgb_to_u32(uint8_t r, uint8_t g, uint8_t b) {
+    // Credit: https://stackoverflow.com/a/39979191/8094047
+    uint8_t alpha = 255;
+    return (alpha << 24) + (r << 16) + (g << 8) + b;
+}
+
+void nano_gui_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
+    pixels[y * global_width + x] = rgb_to_u32(r, g, b);
+}
 
 static void
 registry_handle_global(void *data, struct wl_registry *wl_registry,
@@ -59,7 +71,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     registry = wl_display_get_registry(display);
     struct state_t state = {0};
     wl_registry_add_listener(registry, &registry_listener, &state);
-    struct wl_surface *surface = wl_compositor_create_surface(state.compositor);
+    surface = wl_compositor_create_surface(state.compositor);
 
     // Create shared memory pool
     const int stride = width * 4;
@@ -69,11 +81,22 @@ void nano_gui_create_fixed_size_window(int width, int height) {
                               PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
     struct wl_shm_pool *pool = wl_shm_create_pool(state.shm, fd, shm_pool_size);
- 
-    // TODO: disconnect when closing window
-    wl_display_disconnect(display);
+
+    int index = 0;
+    int offset = height * stride * index;
+    struct wl_buffer *buffer = wl_shm_pool_create_buffer(pool, offset,
+                                                         width, height, stride, WL_SHM_FORMAT_XRGB8888);
+    pixels = (uint32_t *) &pool_data[offset];
+    wl_surface_attach(surface, buffer, 0, 0);
 }
 
 bool nano_gui_process_events() {
-    return wl_display_dispatch(display) != -1;
+    if (wl_display_dispatch(display) != -1) {
+        wl_surface_damage(surface, 0, 0, UINT32_MAX, UINT32_MAX);
+        wl_surface_commit(surface);
+        return true;
+    } else {
+        wl_display_disconnect(display);
+        return false;
+    }
 }

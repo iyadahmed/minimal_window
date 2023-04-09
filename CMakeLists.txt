@@ -26,15 +26,18 @@ elseif (UNIX AND NOT APPLE)
         pkg_get_variable(WAYLAND_SCANNER wayland-scanner wayland_scanner)
         set(XDG_SHELL_PROTOCOL ${WAYLAND_PROTOCOLS_DIR}/stable/xdg-shell/xdg-shell.xml)
 
+        set(GENERATED_HEADERS_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated_headers)
         add_custom_command(
-                OUTPUT xdg-shell-client-protocol.h
-                COMMAND ${WAYLAND_SCANNER} client-header ${XDG_SHELL_PROTOCOL} xdg-shell-client-protocol.h
+                OUTPUT ${GENERATED_HEADERS_DIR}/xdg-shell-client-protocol.h
+                COMMAND ${CMAKE_COMMAND} -E make_directory ${GENERATED_HEADERS_DIR}
+                COMMAND ${WAYLAND_SCANNER} client-header ${XDG_SHELL_PROTOCOL} ${GENERATED_HEADERS_DIR}/xdg-shell-client-protocol.h
         )
         add_custom_command(
                 OUTPUT xdg-shell-protocol.c
                 COMMAND ${WAYLAND_SCANNER} private-code ${XDG_SHELL_PROTOCOL} xdg-shell-protocol.c
         )
-        target_sources(NanoGUI PRIVATE xdg-shell-protocol.c xdg-shell-client-protocol.h)
+        target_sources(NanoGUI PRIVATE xdg-shell-protocol.c ${GENERATED_HEADERS_DIR}/xdg-shell-client-protocol.h)
+        target_include_directories(NanoGUI PRIVATE ${GENERATED_HEADERS_DIR})
     endif ()
 else ()
     message(FATAL_ERROR "Unsupported platform")

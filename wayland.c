@@ -98,6 +98,9 @@ void nano_gui_create_fixed_size_window(int width, int height) {
 
 bool nano_gui_process_events() {
     if (wl_display_dispatch(display) != -1) {
+        // Damage surface
+        // NOTE: it is not very efficient to do this every iteration, but we aim to make API minimal
+        // we could later expose an "update" function if we want to, it would be one extra function to the API.
         wl_surface_damage(surface, 0, 0, UINT32_MAX, UINT32_MAX);
         wl_surface_commit(surface);
         return true;

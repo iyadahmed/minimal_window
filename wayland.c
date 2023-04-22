@@ -97,7 +97,6 @@ static void xdg_surface_configure(void *data, struct xdg_surface *xdg_surface, u
     struct client_state *state = data;
     xdg_surface_ack_configure(xdg_surface, serial);
 
-    wl_buffer_add_listener(buffer, &wl_buffer_listener, NULL);
     wl_surface_attach(state->wl_surface, buffer, 0, 0);
     wl_surface_commit(state->wl_surface);
 }
@@ -165,6 +164,8 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     buffer = wl_shm_pool_create_buffer(pool, 0, width, height, stride, WL_SHM_FORMAT_XRGB8888);
     wl_shm_pool_destroy(pool);
     close(fd);
+
+    wl_buffer_add_listener(buffer, &wl_buffer_listener, NULL);
 }
 
 bool nano_gui_process_events() {

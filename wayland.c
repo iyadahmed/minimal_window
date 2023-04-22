@@ -197,6 +197,8 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     xdg_toplevel_set_title(global_client_state.xdg_toplevel, "Example client");
     wl_surface_commit(global_client_state.wl_surface);
 
+    xdg_toplevel_add_listener(global_client_state.xdg_toplevel, &xdg_toplevel_listener, NULL);
+
 
     // Create buffer
     int stride = width * 4;

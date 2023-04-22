@@ -3,10 +3,11 @@ A very small GUI library for putting pixels on the screen, perfect for software 
 
 ## Supported Platforms
 - [x] Win32 (Windows)
-- [ ] X11 (Linux, and macOS via XQuartz)
+- [x] Wayland (Linux)
+- [x] X11 (Linux, and macOS via XQuartz) (might need more work)
 
 ## Supported Compilers
-- [x] GCC on Windows (MSYS2 Mingw64)
+- [x] GCC
 - [ ] MSVC
 
 
@@ -36,4 +37,4 @@ int main() {
 ```
 
 ## Example: raytracing
-See [WonderBox](https://github.com/iyadahmed/WonderBox/blob/main/main.c)
+https://github.com/iyadahmed/NanoGUI_raytracing/blob/main/main.c

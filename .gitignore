@@ -1,2 +1,3 @@
 # Project exclude paths
 /cmake-build-*/
+/build/

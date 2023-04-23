@@ -39,6 +39,8 @@ static int global_data_size;
 static int global_width, global_height;
 static struct wl_buffer *global_wl_buffer;
 static bool global_running = false;
+static struct wl_pointer *pointer = NULL;
+struct wl_seat *seat;
 
 static uint32_t rgb_to_u32(uint8_t r, uint8_t g, uint8_t b) {
   /* Credit: https://stackoverflow.com/a/39979191/8094047 */
@@ -121,7 +123,7 @@ static const struct wl_pointer_listener pointer_listener = {
 
 static void seat_handle_capabilities(void *data, struct wl_seat *seat, uint32_t capabilities) {
   if (capabilities & WL_SEAT_CAPABILITY_POINTER) {
-    struct wl_pointer *pointer = wl_seat_get_pointer(seat);
+    pointer = wl_seat_get_pointer(seat);
     wl_pointer_add_listener(pointer, &pointer_listener, seat);
   }
 }
@@ -130,17 +132,10 @@ static const struct wl_seat_listener seat_listener = {
     .capabilities = seat_handle_capabilities,
 };
 
-static void wl_buffer_release(void *data, struct wl_buffer *wl_buffer) {
-  /* Sent by the compositor when it's no longer using this buffer */
-  wl_buffer_destroy(wl_buffer);
-}
-
-static const struct wl_buffer_listener wl_buffer_listener = {
-    .release = wl_buffer_release,
-};
-
 static void xdg_surface_handle_configure(void *data, struct xdg_surface *xdg_surface, uint32_t serial) {
   xdg_surface_ack_configure(xdg_surface, serial);
+
+  wl_surface_attach(global_client_state.wl_surface, global_wl_buffer, 0, 0);
   wl_surface_commit(global_client_state.wl_surface);
 }
 
@@ -170,7 +165,7 @@ static void registry_global(void *data, struct wl_registry *wl_registry, uint32_
     xdg_wm_base_add_listener(state->xdg_wm_base, &xdg_wm_base_listener, state);
 
   } else if (strcmp(interface, wl_seat_interface.name) == 0) {
-    struct wl_seat *seat = wl_registry_bind(global_client_state.wl_registry, name, &wl_seat_interface, 1);
+    seat = wl_registry_bind(global_client_state.wl_registry, name, &wl_seat_interface, 1);
     wl_seat_add_listener(seat, &seat_listener, NULL);
   }
 }
@@ -201,20 +196,6 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     return;
   }
 
-  global_client_state.wl_surface = wl_compositor_create_surface(global_client_state.wl_compositor);
-  global_client_state.xdg_surface =
-      xdg_wm_base_get_xdg_surface(global_client_state.xdg_wm_base, global_client_state.wl_surface);
-  global_client_state.xdg_toplevel = xdg_surface_get_toplevel(global_client_state.xdg_surface);
-
-  xdg_toplevel_set_title(global_client_state.xdg_toplevel, "Example client");
-
-  xdg_surface_add_listener(global_client_state.xdg_surface, &xdg_surface_listener, &global_client_state);
-  xdg_toplevel_add_listener(global_client_state.xdg_toplevel, &xdg_toplevel_listener, NULL);
-  wl_buffer_add_listener(global_wl_buffer, &wl_buffer_listener, NULL);
-
-  wl_surface_commit(global_client_state.wl_surface);
-  wl_display_roundtrip(global_client_state.wl_display);
-
   /* Create buffer */
   {
     int stride = width * 4;
@@ -238,8 +219,16 @@ void nano_gui_create_fixed_size_window(int width, int height) {
     close(fd);
   }
 
-  wl_surface_attach(global_client_state.wl_surface, global_wl_buffer, 0, 0);
+  global_client_state.wl_surface = wl_compositor_create_surface(global_client_state.wl_compositor);
+  global_client_state.xdg_surface =
+      xdg_wm_base_get_xdg_surface(global_client_state.xdg_wm_base, global_client_state.wl_surface);
+  global_client_state.xdg_toplevel = xdg_surface_get_toplevel(global_client_state.xdg_surface);
+
+  xdg_toplevel_set_title(global_client_state.xdg_toplevel, "Example client");
   wl_surface_commit(global_client_state.wl_surface);
+
+  xdg_surface_add_listener(global_client_state.xdg_surface, &xdg_surface_listener, &global_client_state);
+  xdg_toplevel_add_listener(global_client_state.xdg_toplevel, &xdg_toplevel_listener, NULL);
 
   global_running = true;
 }
@@ -249,10 +238,23 @@ bool nano_gui_process_events() {
     return true;
   } else {
     /* Cleanup */
+    /* TODO: refactor and make code more consistent */
     munmap(global_image_data, global_data_size);
     xdg_toplevel_destroy(global_client_state.xdg_toplevel);
     xdg_surface_destroy(global_client_state.xdg_surface);
     wl_surface_destroy(global_client_state.wl_surface);
+    wl_buffer_destroy(global_wl_buffer);
+    wl_registry_destroy(global_client_state.wl_registry);
+    wl_compositor_destroy(global_client_state.wl_compositor);
+    wl_shm_destroy(global_client_state.wl_shm);
+    wl_seat_destroy(seat);
+    xdg_wm_base_destroy(global_client_state.xdg_wm_base);
+
+    if (pointer != NULL) {
+      wl_pointer_release(pointer);
+    }
+
+    wl_display_disconnect(global_client_state.wl_display);
     return false;
   }
 }

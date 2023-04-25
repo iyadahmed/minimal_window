@@ -9,8 +9,6 @@
 
 #include <windows.h>
 
-#include "minimal_window.h"
-
 #define FIXED_SIZE_WINDOW_STYLE (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU)
 
 static void *bitmap_memory;

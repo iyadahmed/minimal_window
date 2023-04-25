@@ -9,7 +9,7 @@
 
 #include <windows.h>
 
-#include "nanogui.h"
+#include "minimal_window.h"
 
 #define FIXED_SIZE_WINDOW_STYLE (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU)
 
@@ -25,18 +25,18 @@ static uint32_t rgb_to_u32(uint8_t r, uint8_t g, uint8_t b) {
   return (alpha << 24) + (r << 16) + (g << 8) + b;
 }
 
-void nano_gui_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
+void minimal_window_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
   uint32_t *pixel = (uint32_t *)bitmap_memory;
   pixel += y * global_width + x;
   *pixel = rgb_to_u32(r, g, b);
 }
 
-void nano_gui_create_fixed_size_window(int width, int height) {
+void minimal_window_create_fixed_size_window(int width, int height) {
   global_width = width;
   global_height = height;
 
   // Register the window class
-  const wchar_t CLASS_NAME[] = L"NanoGUI Window Class";
+  const wchar_t CLASS_NAME[] = L"Minimal Window Class";
 
   WNDCLASS wc = {0};
   HINSTANCE hInstance = GetModuleHandle(NULL);
@@ -51,7 +51,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
   // Create the window
   HWND hwnd = CreateWindowEx(0,                       // Optional window styles.
                              CLASS_NAME,              // Window class
-                             L"NanoGUI Window",       // Window text
+                             L"Minimal Window",       // Window text
                              FIXED_SIZE_WINDOW_STYLE, // Window style
 
                              // Size and position
@@ -84,7 +84,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
   ShowWindow(hwnd, SW_NORMAL);
 }
 
-bool nano_gui_process_events() {
+bool minimal_window_process_events() {
   MSG msg = {0};
   if (GetMessage(&msg, NULL, 0, 0) > 0) {
     TranslateMessage(&msg);

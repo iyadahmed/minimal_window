@@ -16,12 +16,12 @@ static XImage *image;
 
 static unsigned long rgb_to_ulong(uint8_t r, uint8_t g, uint8_t b) { return 65536 * b + 256 * g + r; }
 
-void nano_gui_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
+void minimal_window_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
   unsigned long color = rgb_to_ulong(r, g, b);
   XPutPixel(image, x, y, color);
 }
 
-void nano_gui_create_fixed_size_window(int width, int height) {
+void minimal_window_create_fixed_size_window(int width, int height) {
   global_width = width;
   global_height = height;
 
@@ -59,7 +59,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
   image = XGetImage(display, window, 0, 0, width, height, AllPlanes, ZPixmap);
 }
 
-bool nano_gui_process_events() {
+bool minimal_window_process_events() {
   XEvent event;
   XNextEvent(display, &event);
   switch (event.type) {

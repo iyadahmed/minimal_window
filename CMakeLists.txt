@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(NanoGUI)
+project(minimal_window)
 
 set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -7,25 +7,25 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 set(USE_X11_NOT_WAYLAND NO CACHE BOOL "Use X11 instead of Wayland on Linux")
 
-add_library(NanoGUI)
-target_include_directories(NanoGUI PUBLIC include)
+add_library(minimal_window)
+target_include_directories(minimal_window PUBLIC include)
 
 if(WIN32)
-    target_sources(NanoGUI PRIVATE win32.c)
+    target_sources(minimal_window PRIVATE win32.c)
 elseif(UNIX AND NOT APPLE)
     if(USE_X11_NOT_WAYLAND)
-        target_sources(NanoGUI PRIVATE x11.c)
+        target_sources(minimal_window PRIVATE x11.c)
         find_package(X11 REQUIRED)
-        target_link_libraries(NanoGUI PRIVATE ${X11_LIBRARIES})
-        target_include_directories(NanoGUI PRIVATE ${X11_INCLUDE_DIR})
+        target_link_libraries(minimal_window PRIVATE ${X11_LIBRARIES})
+        target_include_directories(minimal_window PRIVATE ${X11_INCLUDE_DIR})
     else()
-        target_sources(NanoGUI PRIVATE wayland.c)
+        target_sources(minimal_window PRIVATE wayland.c)
 
         # Finding Wayland based on https://github.com/emersion/hello-wayland/blob/f6a8203309977af03cda94765dd61367c189bea6/Makefile
         find_package(PkgConfig REQUIRED)
         pkg_search_module(WaylandClient REQUIRED wayland-client)
-        target_compile_options(NanoGUI PRIVATE ${WaylandClient_CFLAGS})
-        target_link_libraries(NanoGUI PRIVATE ${WaylandClient_LIBRARIES})
+        target_compile_options(minimal_window PRIVATE ${WaylandClient_CFLAGS})
+        target_link_libraries(minimal_window PRIVATE ${WaylandClient_LIBRARIES})
 
         pkg_get_variable(WAYLAND_PROTOCOLS_DIR wayland-protocols pkgdatadir)
         pkg_get_variable(WAYLAND_SCANNER wayland-scanner wayland_scanner)
@@ -41,8 +41,8 @@ elseif(UNIX AND NOT APPLE)
             OUTPUT xdg-shell-protocol.c
             COMMAND ${WAYLAND_SCANNER} private-code ${XDG_SHELL_PROTOCOL} xdg-shell-protocol.c
         )
-        target_sources(NanoGUI PRIVATE xdg-shell-protocol.c ${GENERATED_HEADERS_DIR}/xdg-shell-client-protocol.h)
-        target_include_directories(NanoGUI PRIVATE ${GENERATED_HEADERS_DIR})
+        target_sources(minimal_window PRIVATE xdg-shell-protocol.c ${GENERATED_HEADERS_DIR}/xdg-shell-client-protocol.h)
+        target_include_directories(minimal_window PRIVATE ${GENERATED_HEADERS_DIR})
     endif()
 else()
     message(FATAL_ERROR "Unsupported platform")

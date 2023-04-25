@@ -48,7 +48,7 @@ static uint32_t rgb_to_u32(uint8_t r, uint8_t g, uint8_t b) {
   return (alpha << 24) + (r << 16) + (g << 8) + b;
 }
 
-void nano_gui_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
+void minimal_window_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b) {
   uint32_t *pixel = (uint32_t *)global_image_data;
   pixel += y * global_width + x;
   *pixel = rgb_to_u32(r, g, b);
@@ -175,7 +175,7 @@ static const struct wl_registry_listener wl_registry_listener = {
     .global_remove = do_nothing,
 };
 
-void nano_gui_create_fixed_size_window(int width, int height) {
+void minimal_window_create_fixed_size_window(int width, int height) {
   global_width = width;
   global_height = height;
   global_client_state.wl_display = wl_display_connect(NULL);
@@ -233,7 +233,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
   global_running = true;
 }
 
-bool nano_gui_process_events() {
+bool minimal_window_process_events() {
   if (wl_display_dispatch(global_client_state.wl_display) && global_running) {
     return true;
   } else {

@@ -23,7 +23,7 @@ void minimal_window_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
 ## Example: filling window with white
 
 ```c
-#include "smallgui.h"
+#include <minimal_window.h>
 int main() {
   int width = 800, height = 600;
   minimal_window_create_fixed_size_window(width, height);
@@ -37,4 +37,4 @@ int main() {
 ```
 
 ## Example: raytracing
-https://github.com/iyadahmed/SmallGUI_raytracing/blob/main/main.c
+https://github.com/iyadahmed/minimal_window_raytracing/blob/main/main.c

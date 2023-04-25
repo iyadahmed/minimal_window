@@ -7,7 +7,8 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 set(USE_X11_NOT_WAYLAND NO CACHE BOOL "Use X11 instead of Wayland on Linux")
 
-add_library(NanoGUI nanogui.h)
+add_library(NanoGUI)
+target_include_directories(NanoGUI PUBLIC include)
 
 if(WIN32)
     target_sources(NanoGUI PRIVATE win32.c)

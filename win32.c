@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #define WIN32_LEAN_AND_MEAN
 #define UNICODE
@@ -37,7 +38,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
   // Register the window class
   const wchar_t CLASS_NAME[] = L"NanoGUI Window Class";
 
-  WNDCLASS wc = {};
+  WNDCLASS wc = {0};
   HINSTANCE hInstance = GetModuleHandle(NULL);
 
   wc.lpfnWndProc = WindowProc;
@@ -84,7 +85,7 @@ void nano_gui_create_fixed_size_window(int width, int height) {
 }
 
 bool nano_gui_process_events() {
-  MSG msg = {};
+  MSG msg = {0};
   if (GetMessage(&msg, NULL, 0, 0) > 0) {
     TranslateMessage(&msg);
     DispatchMessage(&msg);

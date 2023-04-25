@@ -8,7 +8,7 @@ A very small GUI library for putting pixels on the screen, perfect for software 
 
 ## Supported Compilers
 - [x] GCC
-- [ ] MSVC
+- [x] MSVC
 
 
 ## API

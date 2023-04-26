@@ -9,7 +9,7 @@
 
 #include <windows.h>
 
-#define FIXED_SIZE_WINDOW_STYLE (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU)
+#define FIXED_SIZE_WINDOW_STYLE (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION)
 
 static void *bitmap_memory;
 static BITMAPINFO bitmap_info;
@@ -47,13 +47,16 @@ void minimal_window_create_fixed_size_window(int width, int height) {
   RegisterClass(&wc);
 
   // Create the window
-  HWND hwnd = CreateWindowEx(0,                       // Optional window styles.
-                             CLASS_NAME,              // Window class
-                             L"Minimal Window",       // Window text
+  RECT window_rect = {0, 0, width, height};
+  AdjustWindowRect(&window_rect, FIXED_SIZE_WINDOW_STYLE, FALSE);
+  HWND hwnd = CreateWindowEx(0,                   // Optional window styles.
+                             CLASS_NAME,          // Window class
+                             L"Minimal Window",   // Window text
                              FIXED_SIZE_WINDOW_STYLE, // Window style
 
                              // Size and position
-                             CW_USEDEFAULT, CW_USEDEFAULT, width, height,
+                             CW_USEDEFAULT, CW_USEDEFAULT, window_rect.right - window_rect.left,
+                             window_rect.bottom - window_rect.top,
 
                              NULL,      // Parent window
                              NULL,      // Menu

@@ -1,6 +1,6 @@
 // Based on code from the Wayland book:
 // https://wayland-book.com/xdg-shell-basics/example-code.html ability to move
-// and close the window from "hello-wayland":
+// and "hello-wayland":
 // https://github.com/emersion/hello-wayland
 
 #define _POSIX_C_SOURCE 200112L

@@ -9,6 +9,7 @@
 
 #include <windows.h>
 
+// NOTE: WS_CAPTION must be used otherwise AdjustWindowSize will give wrong results
 #define FIXED_SIZE_WINDOW_STYLE (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION)
 
 static void *bitmap_memory;
@@ -49,9 +50,9 @@ void minimal_window_create_fixed_size_window(int width, int height) {
   // Create the window
   RECT window_rect = {0, 0, width, height};
   AdjustWindowRect(&window_rect, FIXED_SIZE_WINDOW_STYLE, FALSE);
-  HWND hwnd = CreateWindowEx(0,                   // Optional window styles.
-                             CLASS_NAME,          // Window class
-                             L"Minimal Window",   // Window text
+  HWND hwnd = CreateWindowEx(0,                       // Optional window styles.
+                             CLASS_NAME,              // Window class
+                             L"Minimal Window",       // Window text
                              FIXED_SIZE_WINDOW_STYLE, // Window style
 
                              // Size and position

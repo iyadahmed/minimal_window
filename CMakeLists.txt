@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
 
-set(USE_X11_NOT_WAYLAND NO CACHE BOOL "Use X11 instead of Wayland on Linux")
+set(FORCE_X11_ON_LINUX NO CACHE BOOL "Use X11 instead of Wayland on Linux")
 
 add_library(minimal_window)
 target_include_directories(minimal_window PUBLIC include)
@@ -21,7 +21,7 @@ if(WIN32)
     target_sources(minimal_window PRIVATE win32.c)
 
 elseif(UNIX AND NOT APPLE)
-    if(USE_X11_NOT_WAYLAND)
+    if(FORCE_X11_ON_LINUX)
         setup_x11()
 
     else()

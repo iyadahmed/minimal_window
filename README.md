@@ -7,7 +7,7 @@ A very small C library for putting pixels on the screen, perfect for software ra
 ## Supported Platforms
 - [x] Win32 (Windows)
 - [x] Wayland (Linux)
-- [x] X11 (Linux, and macOS via XQuartz) (might need more work)
+- [x] X11 (Linux, and macOS via [XQuartz](https://www.xquartz.org/)) (might need more work)
 
 ## Supported Compilers
 - [x] GCC

@@ -19,9 +19,11 @@ endfunction()
 
 if(WIN32)
     target_sources(minimal_window PRIVATE win32.c)
+
 elseif(UNIX AND NOT APPLE)
     if(USE_X11_NOT_WAYLAND)
         setup_x11()
+
     else()
         target_sources(minimal_window PRIVATE wayland.c)
 
@@ -48,8 +50,10 @@ elseif(UNIX AND NOT APPLE)
         target_sources(minimal_window PRIVATE xdg-shell-protocol.c ${GENERATED_HEADERS_DIR}/xdg-shell-client-protocol.h)
         target_include_directories(minimal_window PRIVATE ${GENERATED_HEADERS_DIR})
     endif()
+
 elseif(UNIX AND APPLE)
     setup_x11()
+
 else()
     message(FATAL_ERROR "Unsupported platform")
 endif()

@@ -1,3 +1,6 @@
+Build Status:  
+[![](http://github-actions.40ants.com/iyadahmed/minimal_window/matrix.svg)](https://github.com/iyadahmed/minimal_window)
+
 # Minimal Window
 A very small C library for putting pixels on the screen, perfect for software raytracing projects.
 

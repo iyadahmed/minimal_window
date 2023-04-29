@@ -27,6 +27,9 @@ elseif(UNIX AND NOT APPLE)
     else()
         target_sources(minimal_window PRIVATE wayland.c)
 
+        # Needed for shm_open/close
+        target_link_libraries(minimal_window PRIVATE librt.so)
+
         # Finding Wayland based on https://github.com/emersion/hello-wayland/blob/f6a8203309977af03cda94765dd61367c189bea6/Makefile
         find_package(PkgConfig REQUIRED)
         pkg_search_module(WaylandClient REQUIRED wayland-client)

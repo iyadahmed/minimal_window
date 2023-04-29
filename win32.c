@@ -12,9 +12,9 @@
 // NOTE: WS_CAPTION must be used otherwise AdjustWindowSize will give wrong results
 #define FIXED_SIZE_WINDOW_STYLE (WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION)
 
-static void *bitmap_memory;
 static BITMAPINFO bitmap_info;
 static int global_width, global_height;
+static void *bitmap_memory;
 
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

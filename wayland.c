@@ -33,13 +33,13 @@ struct client_state {
 };
 
 /* Global variables */
-static struct client_state global_client_state = {0};
-static uint32_t *global_image_data;
+static bool global_running = false;
 static int global_data_size;
 static int global_width, global_height;
+static struct client_state global_client_state = {0};
 static struct wl_buffer *global_wl_buffer;
-static bool global_running = false;
 static struct wl_pointer *pointer = NULL;
+static uint32_t *global_image_data;
 struct wl_seat *seat;
 
 static uint32_t rgb_to_u32(uint8_t r, uint8_t g, uint8_t b) {

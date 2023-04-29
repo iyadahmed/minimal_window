@@ -9,9 +9,9 @@
 #include <X11/Xutil.h> // thanks! https://stackoverflow.com/a/38555194/8094047
 
 static Display *display;
-static Window window;
-static int screen;
 static int global_width, global_height;
+static int screen;
+static Window window;
 static XImage *image;
 
 static unsigned long rgb_to_ulong(uint8_t r, uint8_t g, uint8_t b) { return 65536 * b + 256 * g + r; }

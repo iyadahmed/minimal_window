@@ -14,6 +14,7 @@ A very small C library for putting pixels on the screen, perfect for software ra
 - [x] GCC
 - [x] MSVC
 - [x] Apple Clang
+- [x] Clang
 
 
 ## API

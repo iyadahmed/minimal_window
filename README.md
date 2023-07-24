@@ -6,8 +6,11 @@ A very small C library for putting pixels on the screen, perfect for software ra
 
 ## Supported Platforms
 - [x] Win32 (Windows)
-- [x] Wayland (Linux) (for example on Ubuntu: `sudo apt install libwayland-dev wayland-protocols` is needed for building)
-- [x] X11 (Linux, (for example on Ubuntu: `sudo apt install libx11-dev` is needed for building, on macOS [XQuartz](https://www.xquartz.org/) is needed at runtime)
+- [x] Wayland (Linux):  
+      Wayland development packages are needed for building (for example on Ubuntu: `sudo apt install libwayland-dev wayland-protocols`), you also need a running Wayland session at runtime.
+- [x] X11 (Linux and macOS):  
+      * **Linux**: X11 development packages are needed for building (for example on Ubuntu: `sudo apt install libx11-dev`), you also need a running X11 session at runtime.  
+      * **macOS**: [XQuartz](https://www.xquartz.org/) is needed at runtime.
 - [ ] Native macOS
 
 ## Tested Compilers

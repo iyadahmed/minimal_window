@@ -1,13 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 project(minimal_window)
 
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS OFF)
-
 set(FORCE_X11_ON_LINUX NO CACHE BOOL "Use X11 instead of Wayland on Linux")
 
 add_library(minimal_window)
+target_compile_features(minimal_window PRIVATE c_std_99)
+set_target_properties(minimal_window PROPERTIES C_EXTENSIONS OFF)
 target_include_directories(minimal_window PUBLIC include)
 
 function(setup_x11)

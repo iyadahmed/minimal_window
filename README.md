@@ -3,6 +3,7 @@ Build Status:
 
 # Minimal Window
 A very small C library for putting pixels on the screen, perfect for software raytracing projects.
+![042a6961-4224-4d63-b3b7-650ed83b29cd](https://github.com/iyadahmed/minimal_window/assets/25552173/caf6d436-bdbe-407b-b757-5d8a65aa3a54)
 
 ## How to include in your CMake project
 1. Install the relevant libraries and runtimes: see [Supported Platforms](#supported-platforms)

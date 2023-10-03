@@ -15,6 +15,7 @@
 static BITMAPINFO bitmap_info;
 static int global_width, global_height;
 static void *bitmap_memory;
+static HWND global_hwnd;
 
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -50,22 +51,22 @@ void minimal_window_create_fixed_size_window(int width, int height) {
   // Create the window
   RECT window_rect = {0, 0, width, height};
   AdjustWindowRect(&window_rect, FIXED_SIZE_WINDOW_STYLE, FALSE);
-  HWND hwnd = CreateWindowEx(0,                       // Optional window styles.
-                             CLASS_NAME,              // Window class
-                             L"Minimal Window",       // Window text
-                             FIXED_SIZE_WINDOW_STYLE, // Window style
+  global_hwnd = CreateWindowEx(0,                       // Optional window styles.
+                               CLASS_NAME,              // Window class
+                               L"Minimal Window",       // Window text
+                               FIXED_SIZE_WINDOW_STYLE, // Window style
 
-                             // Size and position
-                             CW_USEDEFAULT, CW_USEDEFAULT, window_rect.right - window_rect.left,
-                             window_rect.bottom - window_rect.top,
+                               // Size and position
+                               CW_USEDEFAULT, CW_USEDEFAULT, window_rect.right - window_rect.left,
+                               window_rect.bottom - window_rect.top,
 
-                             NULL,      // Parent window
-                             NULL,      // Menu
-                             hInstance, // Instance handle
-                             NULL       // Additional application data
+                               NULL,      // Parent window
+                               NULL,      // Menu
+                               hInstance, // Instance handle
+                               NULL       // Additional application data
   );
 
-  if (hwnd == NULL) {
+  if (global_hwnd == NULL) {
     return;
   }
 
@@ -83,7 +84,7 @@ void minimal_window_create_fixed_size_window(int width, int height) {
   bitmap_info.bmiHeader.biBitCount = 32;
   bitmap_info.bmiHeader.biCompression = BI_RGB;
 
-  ShowWindow(hwnd, SW_NORMAL);
+  ShowWindow(global_hwnd, SW_NORMAL);
 }
 
 bool minimal_window_process_events() {
@@ -103,17 +104,19 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     PostQuitMessage(0);
     return 0;
 
-  case WM_PAINT: {
-    PAINTSTRUCT ps;
-    HDC hdc = BeginPaint(hwnd, &ps);
-    // All painting occurs here, between BeginPaint and EndPaint
-    StretchDIBits(hdc, 0, 0, global_width, global_height, 0, 0, global_width, global_height, bitmap_memory,
-                  &bitmap_info, DIB_RGB_COLORS, SRCCOPY);
-    EndPaint(hwnd, &ps);
-  }
+  case WM_PAINT:
+    // We must handle WM_PAINT like this, otherwise drawing outside event handler will not work
+    // TODO: is this bad? :/
     return 0;
 
   default:
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
   }
+}
+
+void minimal_window_request_update() {
+  HDC hdc = GetDC(global_hwnd);
+  StretchDIBits(hdc, 0, 0, global_width, global_height, 0, 0, global_width, global_height, bitmap_memory, &bitmap_info,
+                DIB_RGB_COLORS, SRCCOPY);
+  ReleaseDC(global_hwnd, hdc);
 }

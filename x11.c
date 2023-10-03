@@ -63,9 +63,6 @@ bool minimal_window_process_events() {
   XEvent event;
   XNextEvent(display, &event);
   switch (event.type) {
-  case KeyPress:
-    /* FALLTHROUGH */
-
   case ClientMessage:
     /* destroy window */
     XDestroyWindow(display, window);

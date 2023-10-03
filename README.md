@@ -6,7 +6,7 @@ A very small C library for putting pixels on the screen, perfect for software ra
 
 ## How to include in your CMake project
 1. Install the relevant libraries and runtimes: see [Supported Platforms](#supported-platforms)
-2. Clone or download the repo to your project
+2. Clone or download the repo. to your project
 3. Use `add_subdirectory("/path/to/minimal_window")` with correct path
 4. Link to minimal_window: `target_link_libraries(your_target PRIVATE minimal_window)`
 

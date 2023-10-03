@@ -32,10 +32,9 @@ Alternatively, you can use `ExternalProject`, `FetchContent`, [CPM](https://gith
 ## API
 ```c
 void minimal_window_create_fixed_size_window(int width, int height);
-
 bool minimal_window_process_events();
-
 void minimal_window_draw_pixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
+void minimal_window_request_update();
 ```
 
 ## Example: filling window with white

@@ -224,7 +224,7 @@ void minimal_window_create_fixed_size_window(int width, int height) {
       xdg_wm_base_get_xdg_surface(global_client_state.xdg_wm_base, global_client_state.wl_surface);
   global_client_state.xdg_toplevel = xdg_surface_get_toplevel(global_client_state.xdg_surface);
 
-  xdg_toplevel_set_title(global_client_state.xdg_toplevel, "Example client");
+  xdg_toplevel_set_title(global_client_state.xdg_toplevel, "Minimal Window");
   wl_surface_commit(global_client_state.wl_surface);
 
   xdg_surface_add_listener(global_client_state.xdg_surface, &xdg_surface_listener, &global_client_state);

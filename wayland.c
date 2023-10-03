@@ -258,3 +258,10 @@ bool minimal_window_process_events() {
     return false;
   }
 }
+
+void minimal_window_request_update() {
+  wl_surface_frame(global_client_state.wl_surface);
+  wl_surface_attach(global_client_state.wl_surface, global_wl_buffer, 0, 0);
+  wl_surface_damage_buffer(global_client_state.wl_surface, 0, 0, INT32_MAX, INT32_MAX);
+  wl_surface_commit(global_client_state.wl_surface);
+}

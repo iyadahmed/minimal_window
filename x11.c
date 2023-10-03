@@ -74,12 +74,16 @@ bool minimal_window_process_events() {
     return false;
 
   case Expose:
-    /* draw the window */
-    //            XFillRectangle(display, window, DefaultGC(display, screen), 0, 0, global_width, global_height);
     XPutImage(display, window, DefaultGC(display, screen), image, 0, 0, 0, 0, global_width, global_height);
-
-    /* NO DEFAULT */
+    return true;
   }
 
   return true;
+}
+
+void minimal_window_request_update() {
+  XEvent event;
+  event.type = Expose;
+  event.xexpose.window = window;
+  XSendEvent(display, window, False, ExposureMask, &event);
 }

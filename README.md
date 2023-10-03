@@ -4,6 +4,14 @@ Build Status:
 # Minimal Window
 A very small C library for putting pixels on the screen, perfect for software raytracing projects.
 
+## How to include in your CMake project
+1. Install the relevant libraries and runtimes: see [Supported Platforms](#supported-platforms)
+2. Clone or download the repo to your project
+3. Use `add_subdirectory("/path/to/minimal_window")` with correct path
+4. Link to minimal_window: `target_link_libraries(your_target PRIVATE minimal_window)`
+
+Alternatively, you can use `ExternalProject`, `FetchContent`, [CPM](https://github.com/cpm-cmake/CPM.cmake), or any other method that you are comfortable with, minimal_window is a modern CMake project and should be very easy to include
+
 ## Supported Platforms
 - [x] Win32 (Windows)
 - [x] Wayland (Linux):  
